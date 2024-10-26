@@ -29,9 +29,18 @@ const App: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (!formData.collection || !formData.dataset || !formData.directory) {
+      showToast({
+        title: "Validation Error",
+        description: "All fields are required. Please fill in all fields.",
+        type: "error",
+      });
+      return;
+    }
+
     if (!selectedFile) {
       showToast({
-        title: "Error",
+        title: "Validation Error",
         description: "No file selected. Please select a file to upload.",
         type: "error",
       });
@@ -58,11 +67,7 @@ const App: React.FC = () => {
   return (
     <div className="App">
       <div className="upload-section flex justify-center items-center w-full h-screen">
-        <form
-          action="#"
-          className="flex flex-col border border-slate-600 rounded-lg p-5"
-          onSubmit={handleSubmit}
-        >
+        <form action="#" className="flex flex-col" onSubmit={handleSubmit}>
           <div className="flex flex-col items-start mb-5 w-[480px]">
             <label htmlFor="collection" className="mb-2">
               Collection
