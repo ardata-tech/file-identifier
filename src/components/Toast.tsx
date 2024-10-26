@@ -11,7 +11,7 @@ export type ToastProps = {
 const Toast: React.FC<ToastProps> = ({
   title,
   description,
-  type,
+  type = "info",
   timer = 3000,
 }) => {
   const { hideToast } = useContext(ToastContext) as ToastContextType;
@@ -24,9 +24,16 @@ const Toast: React.FC<ToastProps> = ({
     return () => clearTimeout(timerId);
   }, [timer, hideToast]);
 
+  const typeClasses = {
+    success: "bg-green-500 text-white",
+    info: "bg-blue-500 text-white",
+    warning: "bg-yellow-500 text-black",
+    error: "bg-red-500 text-white",
+  };
+
   return (
     <div className="toast toast-top toast-end">
-      <div className={`alert alert-${type}`}>
+      <div className={`alert ${typeClasses[type]}`}>
         <span>{title || "Title not set"}</span>
       </div>
       <div className="alert">
