@@ -5,15 +5,25 @@ import { useToast } from "./context/ToastContext";
 const App: React.FC = () => {
   const { showToast } = useToast();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [collection, setCollection] = useState("");
-  const [dataset, setDataset] = useState("");
-  const [directory, setDirectory] = useState("");
+  const [formData, setFormData] = useState({
+    collection: "",
+    dataset: "",
+    directory: "",
+  });
 
   const handleFileChange = (file: File | null) => {
     setSelectedFile(file);
     if (file) {
       console.log("Selected file:", file.name);
     }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [id]: value,
+    }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -48,7 +58,11 @@ const App: React.FC = () => {
   return (
     <div className="App">
       <div className="upload-section flex justify-center items-center w-full h-screen">
-        <form action="#" className="flex flex-col" onSubmit={handleSubmit}>
+        <form
+          action="#"
+          className="flex flex-col border border-slate-600 rounded-lg p-5"
+          onSubmit={handleSubmit}
+        >
           <div className="flex flex-col items-start mb-5 w-[480px]">
             <label htmlFor="collection" className="mb-2">
               Collection
@@ -57,8 +71,9 @@ const App: React.FC = () => {
               id="collection"
               type="text"
               className="p-2 border border-gray-300 rounded w-full"
-              value={collection}
-              onChange={(e) => setCollection(e.target.value)}
+              value={formData.collection}
+              onChange={handleInputChange}
+              placeholder="e.g. My Collection"
             />
           </div>
           <div className="flex flex-col items-start mb-5 w-[480px]">
@@ -69,8 +84,9 @@ const App: React.FC = () => {
               id="dataset"
               type="text"
               className="p-2 border border-gray-300 rounded w-full"
-              value={dataset}
-              onChange={(e) => setDataset(e.target.value)}
+              value={formData.dataset}
+              onChange={handleInputChange}
+              placeholder="e.g. My Dataset"
             />
           </div>
           <div className="flex flex-col items-start mb-5 w-[480px]">
@@ -81,17 +97,20 @@ const App: React.FC = () => {
               id="directory"
               type="text"
               className="p-2 border border-gray-300 rounded w-full"
-              value={directory}
-              onChange={(e) => setDirectory(e.target.value)}
+              value={formData.directory}
+              onChange={handleInputChange}
+              placeholder="e.g. My Directory"
             />
           </div>
-          <div className="flex flex-col items-center mb-5 p-5 border-2 border-dashed border-slate-600 rounded-lg w-[480px]">
+          <div className="flex flex-col items-center p-5 border-2 border-dashed border-slate-600 rounded-lg w-[480px]">
             <h1 className="text-xl">Select a file to upload</h1>
             <FileInput label="" altLabel="" onFileChange={handleFileChange} />
           </div>
-          <button className="btn btn-active btn-neutral w-36" type="submit">
-            Submit
-          </button>
+          <div className="flex justify-center mt-10">
+            <button className="btn btn-active btn-neutral w-36" type="submit">
+              Submit
+            </button>
+          </div>
         </form>
       </div>
     </div>
